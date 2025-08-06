@@ -343,3 +343,41 @@ function updateCSYear() {
 document.addEventListener('scroll', updateCSYear);
 document.addEventListener('onload', updateCSYear);
 document.addEventListener('onresize', updateCSYear);
+
+// JAVASCRIPT FOR TAGGING FILTER SYSTEM
+document.addEventListener("DOMContentLoaded", () => {
+  const buttons = document.querySelectorAll(".tag-button");
+  const cards = document.querySelectorAll(".cs-card");
+  const sections = document.querySelectorAll(".cs-year-group");
+
+  function filterCards(filter) {
+    cards.forEach(card => {
+      const tags = card.getAttribute("data-tags").split(",");
+      if (filter === "all" || tags.includes(filter)) {
+          card.classList.remove("hidden");
+      } else {
+          card.classList.add("hidden");
+      }
+    });
+
+    // Loop through each section and check if any cards inside are visible
+    sections.forEach(section => {
+      const visibleCards = section.querySelectorAll(".cs-card:not(.hidden)");
+      if (visibleCards.length === 0) {
+          section.classList.add("hidden");
+      } else {
+          section.classList.remove("hidden");
+      }
+    });
+  }
+
+  buttons.forEach(button => {
+      button.addEventListener("click", () => {
+      buttons.forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      const filter = button.getAttribute("data-filter");
+      filterCards(filter);
+      });
+  });
+});
