@@ -32,28 +32,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 }})
 
 function setupAnimations() {
-  const splitTypes = document.querySelectorAll('.reveal-type');
-
-  splitTypes.forEach((char,i) => {
-
-      const text = new SplitType(char,{ types: 'words, chars'})
-
-      gsap.from(text.words, {
-        scrollTrigger: {
-            trigger: char,
-            start: 'bottom 90%',
-            end: 'bottom 85%',
-            scrub: false,
-            markers: false,
-            toggleActions: 'play play reverse reverse'
-        },
-        stagger: 0.05,
-        opacity: 0,
-        y:90,
-        transformOrigin: 'bottom',
-        duration: 0.3,
-      })
-  });
 
   var sections = gsap.utils.toArray('.case-study-animate2');
 
