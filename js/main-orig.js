@@ -52,6 +52,30 @@ screen.orientation.addEventListener('change', () => {
   window.location.reload();
 });
 
+//Open/Close Menu On Click
+let menuState = 0; //0 = Closed
+
+document.getElementById("hamburger").addEventListener("click", menuToggle);
+
+function menuToggle() {
+  console.log("X Clicked");
+  var x = document.getElementById("box-nav-menu");
+  if (menuState == 0) {
+    x.classList.remove("box-nav-close");
+    x.classList.add("box-nav"); 
+    menuState = 1; //Menu Is Now Open
+  } else {
+    x.classList.remove("box-nav");
+    x.classList.add("box-nav-close");
+    menuState = 0; //Menu Is Now Closed
+  }
+}
+
+
+
+
+
+
 //GSAP and SplitType
 
 const isAnimationOk = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
@@ -66,10 +90,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
 }})
 
 function setupAnimations() {
-  const splitTypes = document.querySelectorAll('.reveal-type')
 
-  splitTypes.forEach((char,i) => {
-    const text = new SplitType(char,{ types: 'words, chars'});
+const splitTypes = document.querySelectorAll('.reveal-type')
+
+splitTypes.forEach((char,i) => {
+
+    const text = new SplitType(char,{ types: 'words, chars'})
 
     gsap.from(text.words, {
        scrollTrigger: {
@@ -86,44 +112,86 @@ function setupAnimations() {
        transformOrigin: 'bottom',
        duration: 0.3,
     })
-  });
+})
 
-  gsap.from(".text-block-animate", {
+
+
+gsap.from(".line", {
+  scrollTrigger: {
+      trigger: ".line",
+      start: 'bottom 90%',
+      end: 'bottom 85%',
+      scrub: false,
+      markers: false,
+      toggleActions: 'play play reverse reverse'
+  },
+  stagger: 0.05,
+  opacity: 0,
+  scaleX: 0,
+  x:-90,
+  transformOrigin: 'left',
+  duration: 0.3,
+})
+
+gsap.from(".text-block-animate", {
+  scrollTrigger: {
+      trigger: ".reveal-type",
+      start: 'bottom 90%',
+      end: 'bottom 85%',
+      scrub: false,
+      markers: false,
+      toggleActions: 'play play reverse reverse'
+  },
+  stagger: 0.05,
+  opacity: 0,
+  y:-90,
+  transformOrigin: 'left',
+  duration: 0.3,
+})
+
+
+
+gsap.from(".case-study-animate", {
+  scrollTrigger: {
+      trigger: ".case-study-animate",
+      start: 'bottom 90%',
+      end: 'bottom 85%',
+      scrub: false,
+      markers: false,
+      toggleActions: 'play play reverse reverse'
+  },
+  stagger: 0.05,
+  opacity: 0,
+  y: 200,
+  scale: 0,
+  rotate: -45,
+  transformOrigin: 'center right',
+  duration: 0.3,
+})
+
+
+var sections = gsap.utils.toArray('.case-study-animate2');
+
+sections.forEach((section) => {
+  gsap.from(section, {
     scrollTrigger: {
-        trigger: ".reveal-type",
-        start: 'bottom 90%',
-        end: 'bottom 85%',
-        scrub: false,
-        markers: false,
-        toggleActions: 'play play reverse reverse'
+      trigger: section,
+      start: '10% 90%',
+      end: 'top 90%',
+      scrub: false,
+      markers: false,
+      toggleActions: 'play play reverse reverse'
     },
-    stagger: 0.05,
     opacity: 0,
-    y:-90,
-    transformOrigin: 'left',
-    duration: 0.3,
-  })
-
-  var sections = gsap.utils.toArray('.case-study-animate2');
-
-  sections.forEach((section) => {
-    gsap.from(section, {
-      scrollTrigger: {
-        trigger: section,
-        start: '10% 90%',
-        end: 'top 90%',
-        scrub: false,
-        markers: false,
-        toggleActions: 'play play reverse reverse'
-      },
-      opacity: 0,
-      y: 200,
-      scale: 0,
-      rotate: 25,
-      transformOrigin: '40% 40%',
-      duration: 0.4,
-    });
+    y: 200,
+    scale: 0,
+    rotate: 25,
+    transformOrigin: '40% 40%',
+    duration: 0.4,
   });
+});
+
+
 }
 
 const splitTypes = document.querySelectorAll('.reveal-type2')
@@ -156,6 +224,10 @@ splitTypes.forEach((char,i) => {
       transformOrigin: 'bottom',
       duration: 0.2,
    })
+   
+   
+   
+
 })
 
 gsap.registerPlugin(ScrollTrigger);
@@ -386,14 +458,95 @@ animate(); // Start the animation
 	window.addEventListener('resize', handleWindowResize, false);
 };
 
-// Pin Section During Scroll Home Page Spline
-// ==============================================
+
+
+// // Lottie Animation Arrow
+// // ==============================================
+
+import { DotLottie } from "https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm";
+
+const btn1canvas = document.getElementById("dlBtn1"); // Select canvas by ID
+
+const LottieButton1 = new DotLottie({
+    canvas: btn1canvas,
+    src: "./Compress_X_1.json", // json file
+    renderer: "svg",
+    loop: false,
+    autoplay: false
+});
+
+
+let btn1pause = 24; // Pause Frame in animation
+let btn1end = 60;  // Last Frame in animation
+
+// G4 061625 - Start Changes to address hamburger animation
+//
+// 1 - Removed mouseenter functionality
+// 2 - Added Btn1ClickState to track button status
+// 3 - Added Logic to click handler to animate the hamburger forward or reverse
+// 4 - Removed mouseleave functionality
+
+function Btn1Hover() {
+    // LottieButton1.setSegment(1, btn1pause);
+    // LottieButton1.play();
+}
+
+let Btn1ClickState = 0;
+
+function Btn1Click() {
+    // LottieButton1.setSegment(btn1pause, btn1end);
+      if (Btn1ClickState == 0) {
+        LottieButton1.setMode("forward");
+        LottieButton1.setSegment(1, btn1pause);
+        LottieButton1.play();
+        Btn1ClickState = 1;
+        console.log("Menu Opened - Btn1ClickState = "+Btn1ClickState);
+    } else {
+        LottieButton1.setMode("reverse");
+        LottieButton1.setSegment(1, btn1pause);
+        LottieButton1.play();
+        Btn1ClickState = 0;
+        console.log("Menu Closed - Btn1ClickState = "+Btn1ClickState);
+      }
+}
+
+function Btn1Exit() {
+  // LottieButton1.playSegments(1, 24);
+  // LottieButton1.setDirection(-1);
+  // LottieButton1.play();
+}
+
+// G4 061625 End of Changes
+
+btn1canvas.addEventListener("mouseenter", Btn1Hover);
+btn1canvas.addEventListener("click", Btn1Click);
+btn1canvas.addEventListener("mouseleave", Btn1Exit);
+
+
+
+// // Pin Section During Scroll Home Page Spline
+// // ==============================================
 
 
 document.addEventListener("DOMContentLoaded", () => {
   const header = document.getElementById("spline-path-canvas");
   const s4 = document.getElementById("section4");
   const scrollThreshold = 2800; // px
+
+  // GD4 Commented out the folloeing code and added new code below 052825
+  //     Also added const s4 above to grab bottom of Section4 
+  //
+
+  // window.addEventListener("scroll", () => {
+  //   if (window.scrollY > scrollThreshold) {
+  //     header.classList.add("sticky");
+  //     header.classList.remove("nosticky"); // Optional
+  //     console.log("window.scrollY: "+window.scrollY);
+  //   } else {
+  //     header.classList.remove("sticky");
+  //     header.classList.add("nosticky");
+  //   }
+  // });
 
   window.addEventListener("scroll", () => {
     let s4rect = s4.getBoundingClientRect();
@@ -407,6 +560,32 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+
+
+// // Case Study Year Update on Scroll
+// // ==============================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  const yearSpan = document.getElementById("activeYear");
+  const sections = document.querySelectorAll(".year-section");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const year = entry.target.dataset.year;
+        yearSpan.textContent = year;
+      }
+    });
+  }, {
+    threshold: 0.1 // Adjust as needed (0.1 means 10% of the section is visible)
+  });
+
+  sections.forEach(section => observer.observe(section));
+});
+
+
+// G4 Added 052825
+// G4 Modified 062825
 // ---- Update Element Corner Data in Hero Section
 // 
 let heroElement = document.getElementById("heroSection");
@@ -421,6 +600,8 @@ function updateHeroDimensions() {
   let heroBottom = rect.bottom.toFixed(2);
   let heroRight = rect.right.toFixed(2);
   let heroLeft = rect.left.toFixed(2);
+
+  // console.log("top: "+rect.top+" , bottom: "+rect.bottom+" , left: "+rect.left+" , right "+rect.right);
 
   TLspan.innerHTML = '(' + heroLeft + ',' + heroTop + ')';
   BLspan.innerHTML = '(' + heroLeft + ',' + heroBottom + ')';
@@ -438,122 +619,151 @@ document.getElementsByTagName("BODY")[0].onresize = function() {updateHeroDimens
 
 // G5 Added 053125
 // ---- Scramble Text on Hover
-// G4 **** Move to mainmenu.js ****
-document.querySelectorAll('.scramble-hover').forEach(element => {
-  let randomChars = "abcdefghijklmnopqrtsuvwxyz";
-  let originalText = element.dataset.text;
-
-  element.addEventListener('mouseover',() => {
-      let iterations = 0;
-      let interval = setInterval(() => {
-          element.textContent = originalText.split("").map
-          ((char,index) => {
-              if (index < iterations) return char;
-              return randomChars.charAt(Math.floor(Math.random
-              () * randomChars.length));
-          })
-          .join("");
-          if( iterations >= originalText.length){
-              clearInterval(interval);
-          }
-          iterations += 1 / 1;
-      },60)
+// 
+document.querySelectorAll('.scramble-hover').forEach(element =>
+  {
+      let randomChars = "abcdefghijklmnopqrtsuvwxyz";
+      let originalText = element.dataset.text;
+  
+      element.addEventListener('mouseover',() => {
+          let iterations = 0;
+          let interval = setInterval(() => {
+              element.textContent = originalText.split("").map
+              ((char,index) => {
+                  if (index < iterations) return char;
+                  return randomChars.charAt(Math.floor(Math.random
+                  () * randomChars.length));
+              })
+              .join("");
+              if( iterations >= originalText.length){
+                  clearInterval(interval);
+              }
+              iterations += 1 / 1;
+          },60)
+      })
   })
-})
+
+  
 
 // G5 Added 053125
 // ---- Pixelation Overlay on Hover
-// Used on home.html, CaseStudies.html
-document.addEventListener('DOMContentLoaded', function () {
-  const animationStepDuration = 0.3; // Adjust this value to control the timing
-  const gridSize = 17; // Number of pixels per row and column (adjustable)
-  // Calculate pixel size dynamically
-  const pixelSize = 100 / gridSize; // Calculate the size of each pixel as a percentage
-  // Select all cards
-  const cards = document.querySelectorAll('[data-pixelated-image-reveal]');
-  // Detect if device is touch device
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches;
-  // Loop through each card
-  cards.forEach((card) => {
-    const pixelGrid = card.querySelector('[data-pixelated-image-reveal-grid]');
-    const activeCard = card.querySelector('[data-pixelated-image-reveal-active]');
-    // Remove any existing pixels with the class 'pixelated-image-card__pixel'
-    const existingPixels = pixelGrid.querySelectorAll('.pixelated-image-card__pixel');
-    existingPixels.forEach(pixel => pixel.remove());
-    // Create a grid of pixels dynamically based on the gridSize
-    for (let row = 0; row < gridSize; row++) {
-      for (let col = 0; col < gridSize; col++) {
-        const pixel = document.createElement('div');
-        pixel.classList.add('pixelated-image-card__pixel');
-        pixel.style.width = `${pixelSize}%`; // Set the pixel width dynamically
-        pixel.style.height = `${pixelSize}%`; // Set the pixel height dynamically
-        pixel.style.left = `${col * pixelSize}%`; // Set the pixel's horizontal position
-        pixel.style.top = `${row * pixelSize}%`; // Set the pixel's vertical position
-        pixelGrid.appendChild(pixel);
+// 
+  document.addEventListener('DOMContentLoaded', function () {
+    const animationStepDuration = 0.3; // Adjust this value to control the timing
+    const gridSize = 17; // Number of pixels per row and column (adjustable)
+    // Calculate pixel size dynamically
+    const pixelSize = 100 / gridSize; // Calculate the size of each pixel as a percentage
+    // Select all cards
+    const cards = document.querySelectorAll('[data-pixelated-image-reveal]');
+    // Detect if device is touch device
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.matchMedia("(pointer: coarse)").matches;
+    // Loop through each card
+    cards.forEach((card) => {
+      const pixelGrid = card.querySelector('[data-pixelated-image-reveal-grid]');
+      const activeCard = card.querySelector('[data-pixelated-image-reveal-active]');
+      // Remove any existing pixels with the class 'pixelated-image-card__pixel'
+      const existingPixels = pixelGrid.querySelectorAll('.pixelated-image-card__pixel');
+      existingPixels.forEach(pixel => pixel.remove());
+      // Create a grid of pixels dynamically based on the gridSize
+      for (let row = 0; row < gridSize; row++) {
+        for (let col = 0; col < gridSize; col++) {
+          const pixel = document.createElement('div');
+          pixel.classList.add('pixelated-image-card__pixel');
+          pixel.style.width = `${pixelSize}%`; // Set the pixel width dynamically
+          pixel.style.height = `${pixelSize}%`; // Set the pixel height dynamically
+          pixel.style.left = `${col * pixelSize}%`; // Set the pixel's horizontal position
+          pixel.style.top = `${row * pixelSize}%`; // Set the pixel's vertical position
+          pixelGrid.appendChild(pixel);
+        }
       }
-    }
-    const pixels = pixelGrid.querySelectorAll('.pixelated-image-card__pixel');
-    const totalPixels = pixels.length;
-    const staggerDuration = animationStepDuration / totalPixels; // Calculate stagger duration dynamically
-    let isActive = false; // Variable to track if the card is active
-    let delayedCall;
-    const animatePixels = (activate) => {
-      isActive = activate;
-      gsap.killTweensOf(pixels); // Reset any ongoing animations
-      if (delayedCall) {
-        delayedCall.kill();
+      const pixels = pixelGrid.querySelectorAll('.pixelated-image-card__pixel');
+      const totalPixels = pixels.length;
+      const staggerDuration = animationStepDuration / totalPixels; // Calculate stagger duration dynamically
+      let isActive = false; // Variable to track if the card is active
+      let delayedCall;
+      const animatePixels = (activate) => {
+        isActive = activate;
+        gsap.killTweensOf(pixels); // Reset any ongoing animations
+        if (delayedCall) {
+          delayedCall.kill();
+        }
+        gsap.set(pixels, { display: 'none' }); // Make all pixels invisible instantly
+        // Show pixels randomly
+        gsap.to(pixels, {
+          display: 'block',
+          duration: 0,
+          stagger: {
+            each: staggerDuration,
+            from: 'random'
+          }
+        });
+        // After animationStepDuration, show or hide the activeCard
+        delayedCall = gsap.delayedCall(animationStepDuration, () => {
+          if (activate) {
+            activeCard.style.display = 'block';
+            // **Set pointer-events to none so clicks pass through activeCard**
+            activeCard.style.pointerEvents = 'none';
+          } else {
+            activeCard.style.display = 'none';
+          }
+        });
+        // Hide pixels randomly
+        gsap.to(pixels, {
+          display: 'none',
+          duration: 0,
+          delay: animationStepDuration,
+          stagger: {
+            each: staggerDuration,
+            from: 'random'
+          }
+        });
+      };
+      if (isTouchDevice) {
+        // For touch devices, use click event
+        card.addEventListener('click', () => {
+          animatePixels(!isActive);
+        });
+      } else {
+        // For non-touch devices, use mouseenter and mouseleave
+        card.addEventListener('mouseenter', () => {
+          if (!isActive) {
+            animatePixels(true);
+          }
+        });
+        card.addEventListener('mouseleave', () => {
+          if (isActive) {
+            animatePixels(false);
+          }
+        });
       }
-      gsap.set(pixels, { display: 'none' }); // Make all pixels invisible instantly
-      // Show pixels randomly
-      gsap.to(pixels, {
-        display: 'block',
-        duration: 0,
-        stagger: {
-          each: staggerDuration,
-          from: 'random'
-        }
-      });
-      // After animationStepDuration, show or hide the activeCard
-      delayedCall = gsap.delayedCall(animationStepDuration, () => {
-        if (activate) {
-          activeCard.style.display = 'block';
-          // **Set pointer-events to none so clicks pass through activeCard**
-          activeCard.style.pointerEvents = 'none';
-        } else {
-          activeCard.style.display = 'none';
-        }
-      });
-      // Hide pixels randomly
-      gsap.to(pixels, {
-        display: 'none',
-        duration: 0,
-        delay: animationStepDuration,
-        stagger: {
-          each: staggerDuration,
-          from: 'random'
-        }
-      });
-    };
-    if (isTouchDevice) {
-      // For touch devices, use click event
-      card.addEventListener('click', () => {
-        animatePixels(!isActive);
-      });
-    } else {
-      // For non-touch devices, use mouseenter and mouseleave
-      card.addEventListener('mouseenter', () => {
-        if (!isActive) {
-          animatePixels(true);
-        }
-      });
-      card.addEventListener('mouseleave', () => {
-        if (isActive) {
-          animatePixels(false);
-        }
-      });
-    }
+    });
   });
-});
+
+
+
+  // const elements = document.querySelectorAll(".hoverText1");
+
+  // elements.forEach((element) => {
+  //   const hoverTween = gsap.from(element, { 
+  //     x: -40, 
+  //     duration: 0.4, 
+  //     ease: "power1.inOut",
+  //     stagger: 0.05,
+  //     transformOrigin: 'left',
+  //     paused: true 
+  //   });
+  
+  //   element.addEventListener("mouseenter", () => {
+  //     hoverTween.play();
+  //   });
+  
+  //   element.addEventListener("mouseleave", () => {
+  //     hoverTween.reverse();
+  //   });
+  // });
+  
+
+
 
 // Target all .cs-animate-text panels
 document.querySelectorAll('.cs-animate-text').forEach((panel) => {
@@ -608,7 +818,8 @@ document.querySelectorAll('.cs-animate-text').forEach((panel) => {
     duration: 0.3
   }, ">");
 });
-  
+
+
 const elements = document.querySelectorAll(".hoverText1");
 
 elements.forEach((element) => {
@@ -655,6 +866,8 @@ elements.forEach((element) => {
   element.addEventListener("mouseenter", () => hoverTween.play());
   element.addEventListener("mouseleave", () => hoverTween.reverse());
 });
+
+
 
 //Video Player Controls//
 const video = document.getElementById("myPreviewVideo");
