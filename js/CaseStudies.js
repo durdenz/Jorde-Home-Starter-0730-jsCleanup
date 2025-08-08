@@ -350,6 +350,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const cards = document.querySelectorAll(".cs-card");
   const sections = document.querySelectorAll(".cs-year-group");
 
+  buttons.forEach((btn) => btn.addEventListener('click', () => { console.log(`Filter Button Clicked`);  window.location.reload(true)}));
+
   function filterCards(filter) {
     cards.forEach(card => {
       const tags = card.getAttribute("data-tags").split(",");
